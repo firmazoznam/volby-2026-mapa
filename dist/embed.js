@@ -32,6 +32,7 @@
         // posun stránky tak, aby detail obce začínal tesne pod horným okrajom okna (rovnaké miesto pri každom výbere)
         var top = frames[i].getBoundingClientRect().top + window.pageYOffset + d.y - (parseInt(frames[i].getAttribute('data-scroll-offset') || '0', 10) || 0) - 12;
         try { window.scrollTo({ top: top, behavior: 'smooth' }); } catch (err) { window.scrollTo(0, top); }
+        try { e.source.postMessage({ type: 'volby-mapa-scroll-ok' }, '*'); } catch (err2) {}
       }
     }
   });

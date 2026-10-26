@@ -21,11 +21,13 @@ html,body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);
 .vm-eyebrow{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink);margin:0 0 4px}
 .vm h1{font-size:26px;line-height:1.2;margin:0 0 8px;text-wrap:balance}
 .vm-lead{margin:0 0 14px;color:var(--muted);font-size:16px;line-height:1.4;min-height:2.8em}
+@media (max-width:440px){ .vm-lead{min-height:4.2em} }
 .vm-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
 .vm-modes{display:flex;flex-wrap:wrap;gap:4px;background:var(--soft);border-radius:8px;padding:3px}
 .vm-modes button{border:0;background:transparent;color:var(--fg);font:inherit;font-size:15px;font-weight:700;padding:8px 12px;border-radius:6px;cursor:pointer}
 .vm-modes button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
-.vm-modes button:focus-visible,.vm-zoom button:focus-visible,.vm-legend button:focus-visible,.vm-search input:focus-visible,.vm-toggle:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.vm-modes button:focus-visible,.vm-zoom button:focus-visible,.vm-legend button:focus-visible,.vm-toggle:focus-visible,.vm-card button:focus-visible{outline:2px solid var(--focus);outline-offset:-2px}
+.vm-search input:focus{outline:none;border-color:var(--focus);box-shadow:inset 0 0 0 1px var(--focus)}
 .vm-search{position:relative;flex:1 1 220px;min-width:0}
 .vm-search input{width:100%;font:inherit;font-size:17px;padding:10px 12px 10px 36px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg)}
 .vm-search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:16px;height:16px;fill:none;stroke:var(--muted);stroke-width:2;pointer-events:none}
@@ -124,8 +126,8 @@ html,body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);
 <body>
 <div class="vm" id="vm">
   <p class="vm-eyebrow">Komunálne voľby 2026</p>
-  <h1 id="vm-title">Kto vyhral voľby v každej obci</h1>
-  <p class="vm-lead" id="vm-lead">Každý bod je jedna obec. Farba ukazuje, kto postavil zvoleného starostu alebo primátora.</p>
+  <h1 id="vm-title">Výsledky volieb vo všetkých obciach a mestách</h1>
+  <p class="vm-lead" id="vm-lead">Každý bod je jedna obec. Farba ukazuje, s koho podporou kandidoval zvolený starosta alebo primátor.</p>
   <div class="vm-bar">
     <div class="vm-modes" role="group" aria-label="Zobrazenie">
       <button type="button" data-mode="starosta" aria-pressed="true">Starosta</button>
@@ -158,10 +160,10 @@ html,body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);
 var BASE = (function(){ var s=document.currentScript && document.currentScript.src; return s ? s.replace(/[^\/]*$/,'') : ''; })();
 var DATA = 'data/';
 var MODES = {   // nadpisy a perexy majú zámerne rovnakú dĺžku, aby pri prepínaní obsah neposkakoval
-  starosta: {title:'Kto vyhral voľby v každej obci', lead:'Každý bod je jedna obec. Farba ukazuje, kto postavil zvoleného starostu alebo primátora.', note:'Koalície sú zaradené podľa účasti Smeru-SD a Hlasu-SD, ostatné koalície podľa zloženia.'},
-  zast:     {title:'Najsilnejšia strana v každej obci', lead:'Každý bod je jedna obec. Farba ukazuje subjekt s najväčším počtom mandátov v zastupiteľstve.', note:'Nezávislí sa počítajú spolu ako jedna skupina. Pri rovnosti medzi stranami je bod biely.'},
-  ucast:    {title:'Aká bola účasť v každej obci', lead:'Každý bod je jedna obec. Tmavšia farba znamená vyššiu účasť voličov vo voľbách 2026.', note:'Účasť je podiel zúčastnených zo zapísaných voličov podľa ŠÚ SR.'},
-  obhajoba: {title:'Kde starosta obhájil svoj post', lead:'Každý bod je jedna obec. Farba ukazuje, či zvolený starosta viedol obec už pred voľbami.', note:'Porovnáva sa meno zvoleného starostu v rokoch 2022 a 2026.'}
+  starosta: {title:'Výsledky volieb vo všetkých obciach a mestách', lead:'Každý bod je jedna obec. Farba ukazuje, s koho podporou kandidoval zvolený starosta alebo primátor.', note:'Koalície sú zaradené podľa účasti Smeru-SD a Hlasu-SD, ostatné koalície podľa zloženia.'},
+  zast:     {title:'Najsilnejšia strana v zastupiteľstve každej obce', lead:'Každý bod je jedna obec. Farba ukazuje subjekt s najväčším počtom mandátov v zastupiteľstve.', note:'Nezávislí sa počítajú spolu ako jedna skupina. Pri rovnosti medzi stranami je bod biely.'},
+  ucast:    {title:'Účasť voličov vo všetkých obciach a mestách', lead:'Každý bod je jedna obec. Tmavšia farba znamená vyššiu účasť voličov vo voľbách 2026.', note:'Účasť je podiel zúčastnených zo zapísaných voličov podľa ŠÚ SR.'},
+  obhajoba: {title:'Kde starostovia obhájili post a kde prišla zmena', lead:'Každý bod je jedna obec. Farba ukazuje, či zvolený starosta viedol obec už pred voľbami.', note:'Porovnáva sa meno zvoleného starostu v rokoch 2022 a 2026.'}
 };
 var UCAST_BINS = [[0,40,'#fde0dd','do 40%'],[40,50,'#fbb4b9','40 až 50%'],[50,60,'#f768a1','50 až 60%'],[60,70,'#c51b8a','60 až 70%'],[70,101,'#7a0177','nad 70%']];
 var OBH = {obh:['Starosta obhájil post','#1b998b'], novy:['Nový starosta','#f28c28'], nikto:['Starosta nezvolený alebo bez kandidáta','#ffffff']};
@@ -318,11 +320,16 @@ function showCard(o){
   card.hidden = false; mapEl.classList.add('has-card');
 }
 card.addEventListener('click', function(e){ if(e.target.closest('#vm-godetail')) scrollToDetail(); });
+var scrollAck = false;
+window.addEventListener('message', function(e){ if(e.data && e.data.type==='volby-mapa-scroll-ok') scrollAck = true; });
 function scrollToDetail(){
-  // iframe v článku: o posun sa postará embed.js (vždy na rovnaké miesto - názov obce hore pod okrajom okna)
+  // v článku s embed.js posúva stránku rodič (vždy rovnaké miesto); bez odpovede do 250 ms sa posunieme sami
   var y = det.offsetTop;
-  if(window.parent !== window){ try{ window.parent.postMessage({type:'volby-mapa-scroll', y: y}, '*'); }catch(e){} }
-  else { window.scrollTo({top: y - 12, behavior: 'smooth'}); }
+  if(window.parent !== window){
+    scrollAck = false;
+    try{ window.parent.postMessage({type:'volby-mapa-scroll', y: y}, '*'); }catch(e){}
+    setTimeout(function(){ if(!scrollAck){ try{ det.scrollIntoView({block:'start', behavior:'smooth'}); }catch(e){ det.scrollIntoView(true); } } }, 250);
+  } else { window.scrollTo({top: y - 12, behavior: 'smooth'}); }
 }
 function loadDetail(o){
   var b = ('0'+(parseInt(o[0],10)%64)).slice(-2);
