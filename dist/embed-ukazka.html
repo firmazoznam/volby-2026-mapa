@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="sk">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Ukážka vloženia mapy do článku</title>
+<style>body{font-family:"PT Sans",system-ui,sans-serif;max-width:720px;margin:0 auto;padding:24px 16px;line-height:1.5}</style></head>
+<body>
+<h1>Ukážka článku s mapou</h1>
+<p>Text článku pred widgetom. Widget je iframe, ktorý sa načíta až keď sa k nemu čitateľ doscrolluje (loading="lazy") a výšku si nastaví sám.</p>
+
+<!-- 1. Variant: celé Slovensko -->
+<div class="volby-mapa"></div>
+
+<p>Text článku medzi widgetmi.</p>
+
+<!-- 2. Variant: mapa otvorená na konkrétnu obec (kód obce ŠÚ SR, napr. Zvolen 518158) -->
+<div class="volby-mapa" data-obec="518158" data-mode="zast"></div>
+
+<script src="embed.js" async></script>
+</body>
+</html>
