@@ -155,6 +155,7 @@ function num(n){ return n==null ? '-' : String(Math.round(n)).replace(/\B(?=(\d{
 function pct(x){ return x==null ? '-' : (Math.round(x*10)/10).toFixed(1).replace('.',',')+'%'; }
 function norm(s){ return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/-/g,' ').replace(/\s+/g,' ').trim(); }
 function nezav(s){ return s==='NEKA'; }
+function pl(n, one, few, many){ n = +n; return num(n)+' '+(n===1 ? one : (n>=2 && n<=4) ? few : many); }
 function subj(s){ return nezav(s) ? 'nezávislý kandidát' : s; }
 function postH(){ try{ if(window.parent!==window){ var h=root.getBoundingClientRect().height+2; window.parent.postMessage({type:'volby-mapa-height', height:Math.ceil(h)}, '*'); } }catch(e){} }
 
@@ -251,7 +252,7 @@ function hit(x,y){ var best=-1, bd=1e9; for(var i=0;i<OBCE.length;i++){ var o=OB
 function showTip(i, x, y){
   if(i<0){ tip.hidden=true; return; }
   var o = OBCE[i], h = '<b>'+esc(o[1])+'</b><br><span class="k">'+esc(o[2]==='Bratislava'||o[2]==='Košice'?o[2]:'okres '+o[2])+'</span><br>';
-  if(mode==='zast'){ h += o[13] ? esc(subj(o[13]))+': '+o[14]+' z '+o[15]+' mandátov' : 'bez údajov'; }
+  if(mode==='zast'){ h += o[13] ? esc(subj(o[13]))+': '+(o[14]===o[15] ? 'všetkých '+pl(o[15],'mandát','mandáty','mandátov') : o[14]+' z '+pl(o[15],'mandátu','mandátov','mandátov')) : 'bez údajov'; }
   else if(mode==='ucast'){ h += 'Účasť '+pct(o[7]); }
   else { h += o[9] ? esc(o[9])+' ('+esc(subj(o[10]))+'), '+pct(o[11]) + (mode==='obhajoba' ? (o[12]?'<br>obhájil post':'<br>nový starosta') : '') : (o[5]==='remiza' ? 'rovnosť hlasov, starosta nezvolený' : 'nikto nekandidoval'); }
   tip.innerHTML = h; tip.hidden = false;
@@ -312,22 +313,22 @@ function renderDetail(o, d){
   h += '<div class="vm-stats"><div class="vm-stat"><div class="v">'+pct(u.p)+'</div><div class="l">účasť voličov</div>'+(dd!=null?'<div class="d">'+(dd>=0?'+':'−')+pct(Math.abs(dd)).replace('%',' b.')+' oproti 2022</div>':'')+'</div><div class="vm-stat"><div class="v">'+num(u.uc)+'</div><div class="l">zúčastnených voličov</div></div><div class="vm-stat"><div class="v">'+num(u.z)+'</div><div class="l">zapísaných voličov</div></div></div>';
   // starosta
   var sv = d.s.slice().sort(function(a,b){ return (a[6]-b[6]) || (b[3]-a[3]); }), win = sv.filter(function(c){ return c[5]; })[0];
-  h += '<h3>Voľba '+(prim?'primátora':'starostu')+(sv.length?' <small>'+sv.filter(function(c){return !c[6];}).length+' kandidátov</small>':'')+'</h3>';
+  h += '<h3>Voľba '+(prim?'primátora':'starostu')+(sv.length?' <small>'+pl(sv.filter(function(c){return !c[6];}).length,'kandidát','kandidáti','kandidátov')+'</small>':'')+'</h3>';
   if(!sv.length){ h += '<p class="vm-p22">Nikto nekandidoval, volilo sa len zastupiteľstvo. '+(prim?'Primátor':'Starosta')+' vzíde z nových volieb.</p>'; }
   else {
-    if(!win){ var top=sv[0][3]; var rem=sv.filter(function(c){return c[3]===top;}); h += '<p class="vm-p22"><b>'+(prim?'Primátor':'Starosta')+' nebol zvolený.</b> '+esc(rem.map(function(c){return c[0]+' '+c[1];}).join(' a '))+' získali rovnako po '+num(top)+' hlasov, rozhodnú nové voľby.</p>'; }
-    h += '<ul class="vm-cand">'+sv.map(function(c){ var f=c[1].slice(-1)==='á'; return '<li'+(c[6]?' class="x"':'')+'><span class="nm">'+esc(c[0]+' '+c[1])+(c[5]?'<span class="tag">'+(f?'zvolená':'zvolený')+'</span>':'')+(c[6]?'<span class="tag x">vzdal sa</span>':'')+'</span><span class="pc">'+(c[6]?'–':pct(c[4]))+'</span><span class="sub">'+esc(subj(c[2]))+'</span><span class="hl">'+(c[6]?'hlasy sa nepočítali':num(c[3])+' hlasov')+'</span><span class="bar"><i style="width:'+(c[6]?0:Math.min(100,c[4]))+'%"></i></span></li>'; }).join('')+'</ul>';
+    if(!win){ var top=sv[0][3]; var rem=sv.filter(function(c){return c[3]===top;}); h += '<p class="vm-p22"><b>'+(prim?'Primátor':'Starosta')+' nebol zvolený.</b> '+esc(rem.map(function(c){return c[0]+' '+c[1];}).join(' a '))+' získali rovnako po '+pl(top,'hlase','hlasoch','hlasoch')+', rozhodnú nové voľby.</p>'; }
+    h += '<ul class="vm-cand">'+sv.map(function(c){ var f=c[1].slice(-1)==='á'; return '<li'+(c[6]?' class="x"':'')+'><span class="nm">'+esc(c[0]+' '+c[1])+(c[5]?'<span class="tag">'+(f?'zvolená':'zvolený')+'</span>':'')+(c[6]?'<span class="tag x">vzdal sa</span>':'')+'</span><span class="pc">'+(c[6]?'–':pct(c[4]))+'</span><span class="sub">'+esc(subj(c[2]))+'</span><span class="hl">'+(c[6]?'hlasy sa nepočítali':pl(c[3],'hlas','hlasy','hlasov'))+'</span><span class="bar"><i style="width:'+(c[6]?0:Math.min(100,c[4]))+'%"></i></span></li>'; }).join('')+'</ul>';
   }
   if(d.s22 && d.s22.length){ var p=d.s22[0]; var same = win && win[0]===p[0] && win[1]===p[1]; h += '<p class="vm-p22">V roku 2022 '+(p[1].slice(-1)==='á'?'zvíťazila':'zvíťazil')+' '+esc(p[0]+' '+p[1])+' ('+esc(subj(p[2]))+') so ziskom '+pct(p[3])+'.'+(same?' Post teda '+(p[1].slice(-1)==='á'?'obhájila':'obhájil')+'.':'')+'</p>'; }
   // zastupiteľstvo
   var tot = d.st.reduce(function(a,s){ return a+s[1]; },0), cmap = {};
-  h += '<h3>Zastupiteľstvo <small>'+tot+(d.nv&&d.nv!==tot?' z '+d.nv:'')+' mandátov</small></h3>';
-  if(d.nv && tot<d.nv){ h += '<p class="vm-p22">Neobsadené mandáty ('+(d.nv-tot)+') sa doplnia v nových voľbách.</p>'; }
+  h += '<h3>Zastupiteľstvo <small>'+(d.nv&&d.nv!==tot ? tot+' z '+pl(d.nv,'mandátu','mandátov','mandátov') : pl(tot,'mandát','mandáty','mandátov'))+'</small></h3>';
+  if(d.nv && tot<d.nv){ h += '<p class="vm-p22">'+((d.nv-tot)===1 ? 'Neobsadený ostal jeden mandát, doplní sa v nových voľbách.' : (d.nv-tot)<5 ? 'Neobsadené ostali '+(d.nv-tot)+' mandáty, doplnia sa v nových voľbách.' : 'Neobsadených ostalo '+(d.nv-tot)+' mandátov, doplnia sa v nových voľbách.')+'</p>'; }
   h += '<div class="vm-comp">'+d.st.map(function(s){ return '<i style="width:'+(100*s[1]/Math.max(tot,1))+'%;background:'+partyColor(s[0],cmap)+'" title="'+esc(subj(s[0]))+': '+s[1]+'"></i>'; }).join('')+'</div>';
   h += '<ul class="vm-strany">'+d.st.map(function(s){ return '<li><span class="sw" style="background:'+partyColor(s[0],cmap)+'"></span>'+esc(nezav(s[0])?'nezávislí':s[0])+' <b>'+s[1]+'</b></li>'; }).join('')+'</ul>';
   var obv = Object.keys(d.ob).sort(function(a,b){ return a-b; }), multi = obv.length>1;
   obv.forEach(function(k){ var ob=d.ob[k]; var zv=ob.k.filter(function(c){return c[5];}), nz=ob.k.filter(function(c){return !c[5];});
-    h += '<div class="vm-obv" data-ob="'+k+'">'+(multi?'<h4>Volebný obvod č. '+k+' <small>'+ob.m+' mandátov'+(ob.p!=null?', účasť '+pct(ob.p):'')+'</small></h4>':'')+
+    h += '<div class="vm-obv" data-ob="'+k+'">'+(multi?'<h4>Volebný obvod č. '+k+' <small>'+pl(ob.m,'mandát','mandáty','mandátov')+(ob.p!=null?', účasť '+pct(ob.p):'')+'</small></h4>':'')+
       '<ul class="vm-posl">'+zv.map(function(c){ return '<li><span class="sw" style="background:'+partyColor(c[2],cmap)+'"></span><span class="nm">'+esc(c[0]+' '+c[1])+'</span><span class="hl">'+num(c[3])+'</span><span class="sub">'+esc(subj(c[2]))+'</span></li>'; }).join('')+'</ul>'+
       (nz.length?'<ul class="vm-posl" hidden>'+nz.map(function(c){ return '<li class="nz"><span class="sw" style="background:'+partyColor(c[2],cmap)+'"></span><span class="nm">'+esc(c[0]+' '+c[1])+'</span><span class="hl">'+num(c[3])+'</span><span class="sub">'+esc(subj(c[2]))+'</span></li>'; }).join('')+'</ul><button type="button" class="vm-toggle" data-n="'+nz.length+'">Zobraziť nezvolených kandidátov ('+nz.length+')</button>':'')+'</div>'; });
   det.innerHTML = h; postH();
