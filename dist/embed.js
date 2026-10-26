@@ -21,6 +21,8 @@
     f.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox');
     f.style.cssText = 'display:block;width:100%;border:0;height:' + (el.getAttribute('data-height') || '760') + 'px;max-width:100%';
     if (el.getAttribute('data-scroll-offset')) f.setAttribute('data-scroll-offset', el.getAttribute('data-scroll-offset'));
+    el.textContent = '';   // editor CMS vkladá do prázdneho divu &nbsp;, ktoré by vytvorilo medzeru nad mapou
+    el.style.lineHeight = '0';
     el.appendChild(f); frames.push(f);
   }
   window.addEventListener('message', function (e) {
