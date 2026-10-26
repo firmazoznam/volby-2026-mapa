@@ -13,15 +13,14 @@
   --tip-bg:#111111; --tip-fg:#ffffff; --focus:#1f5fbf;
   --font:"PT Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
 }
-@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --bg:#141414; --fg:#f2f2f2; --muted:#a3a3a3; --line:#2c2c2c; --soft:#1e1e1e; --soft2:#262626; --accent:#ff4d4d; --accent-ink:#ff7a7a; --land:#1b1b1b; --border-okres:#3a3a3a; --border-sr:#777; --tip-bg:#f2f2f2; --tip-fg:#111; color-scheme:dark } }
-:root[data-theme="dark"]{ --bg:#141414; --fg:#f2f2f2; --muted:#a3a3a3; --line:#2c2c2c; --soft:#1e1e1e; --soft2:#262626; --accent:#ff4d4d; --accent-ink:#ff7a7a; --land:#1b1b1b; --border-okres:#3a3a3a; --border-sr:#777; --tip-bg:#f2f2f2; --tip-fg:#111; color-scheme:dark }
+/* Widget je zámerne len svetlý - článok na Topky nemá tmavý režim. */
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:17px;line-height:1.45;-webkit-text-size-adjust:100%}
 .vm{max-width:960px;margin:0 auto;padding-block:4px 12px;padding-left:max(0px,env(safe-area-inset-left,0px));padding-right:max(0px,env(safe-area-inset-right,0px))}
 .vm.standalone{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .vm-eyebrow{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-ink);margin:0 0 4px}
 .vm h1{font-size:26px;line-height:1.2;margin:0 0 8px;text-wrap:balance}
-.vm-lead{margin:0 0 14px;color:var(--muted);font-size:16px;line-height:1.4}
+.vm-lead{margin:0 0 14px;color:var(--muted);font-size:16px;line-height:1.4;min-height:2.8em}
 .vm-bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
 .vm-modes{display:flex;flex-wrap:wrap;gap:4px;background:var(--soft);border-radius:8px;padding:3px}
 .vm-modes button{border:0;background:transparent;color:var(--fg);font:inherit;font-size:15px;font-weight:700;padding:8px 12px;border-radius:6px;cursor:pointer}
@@ -42,6 +41,14 @@ html,body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);
 .vm-zoom button{width:36px;height:36px;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:6px;font-size:18px;line-height:1;cursor:pointer;font-family:inherit}
 .vm-zoom button:hover{background:var(--soft)}
 .vm-hint{position:absolute;left:10px;bottom:8px;font-size:12px;color:var(--muted);background:color-mix(in srgb,var(--bg) 85%,transparent);padding:2px 6px;border-radius:4px;pointer-events:none}
+.vm-card{position:absolute;left:10px;bottom:10px;z-index:3;display:flex;align-items:center;gap:10px;max-width:calc(100% - 20px);background:var(--bg);border:1px solid var(--line);border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,.12);padding:8px 10px;font-size:14px;line-height:1.3}
+.vm-card[hidden]{display:none}
+.vm-card .sw{width:12px;height:12px;border-radius:50%;border:1.5px solid rgba(0,0,0,.25);flex:none}
+.vm-card .t{min-width:0;flex:1}
+.vm-card .t b{display:block;font-size:15px}
+.vm-card .t span{display:block;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vm-card button{flex:none;border:0;background:var(--fg);color:var(--bg);font:inherit;font-size:14px;font-weight:700;padding:7px 12px;border-radius:6px;cursor:pointer}
+.vm-map.has-card .vm-hint{display:none}
 .vm-tip{position:absolute;z-index:4;pointer-events:none;background:var(--tip-bg);color:var(--tip-fg);font-size:14px;line-height:1.35;padding:8px 10px;border-radius:6px;max-width:260px;box-shadow:0 4px 14px rgba(0,0,0,.2)}
 .vm-tip b{font-size:15px}
 .vm-tip .k{opacity:.75}
@@ -50,7 +57,7 @@ html,body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);
 .vm-legend button[aria-pressed="true"]{border-color:var(--fg);background:var(--soft)}
 .vm-legend .sw{width:13px;height:13px;border-radius:50%;border:1.5px solid rgba(0,0,0,.25);flex:none}
 .vm-legend .n{color:var(--muted);font-variant-numeric:tabular-nums}
-.vm-note{font-size:14px;color:var(--muted);margin:10px 0 0}
+.vm-note{font-size:14px;color:var(--muted);margin:10px 0 0;min-height:1.4em}
 /* detail */
 .vm-detail{margin-top:18px;border-top:2px solid var(--fg);padding-top:14px}
 .vm-detail[hidden]{display:none}
@@ -83,7 +90,7 @@ html,body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);
 .vm-strany li{display:flex;align-items:center;gap:6px}
 .vm-strany .sw{width:10px;height:10px;border-radius:2px;flex:none;border:1px solid rgba(0,0,0,.15)}
 .vm-strany b{font-variant-numeric:tabular-nums}
-.vm-obv{margin-top:12px}
+.vm-obv{margin-top:14px}
 .vm-obv h4{font-size:16px;margin:0 0 6px}
 .vm-obv h4 small{font-weight:400;color:var(--muted)}
 .vm-posl{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:6px 20px}
@@ -93,10 +100,24 @@ html,body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);
 .vm-posl .sub{grid-column:2;grid-row:2;font-size:14px;color:var(--muted)}
 .vm-posl .hl{grid-column:3;grid-row:1;font-variant-numeric:tabular-nums;font-weight:700}
 .vm-posl li.nz .nm{font-weight:400}
-.vm-toggle{margin-top:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:6px;padding:8px 12px;font:inherit;font-size:15px;cursor:pointer}
+.vm-hidden{display:none!important}
+.vm-zvol{border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:8px;padding:8px 12px 4px;background:var(--bg)}
+.vm-zh{font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--accent-ink);margin:0 0 4px;display:flex;align-items:center;gap:6px}
+.vm-zh .chk{display:inline-flex;width:18px;height:18px;border-radius:50%;background:var(--accent);color:#fff;font-size:12px;align-items:center;justify-content:center}
+.vm-zh b{font-variant-numeric:tabular-nums}
+.vm-zvol .vm-posl li:last-child,.vm-nezv .vm-posl li:last-child{border-bottom:0}
+.vm-nezv{margin-top:8px;border:1px dashed var(--line);border-radius:8px;background:var(--soft)}
+.vm-nezv .vm-posl{padding:0 12px 6px}
+.vm-nezv .vm-posl .nm{font-weight:400;color:var(--muted)}
+.vm-nezv .vm-posl .hl{font-weight:400;color:var(--muted)}
+.vm-nezv .vm-posl .sw{opacity:.55}
+.vm-toggle{display:flex;align-items:center;gap:8px;width:100%;text-align:left;border:0;background:transparent;color:var(--fg);padding:10px 12px;font:inherit;font-size:15px;font-weight:700;cursor:pointer;border-radius:8px}
+.vm-toggle small{font-weight:400;color:var(--muted);font-size:13px;margin-left:auto}
+.vm-toggle .arr{width:14px;color:var(--muted)}
+.vm-toggle b{font-variant-numeric:tabular-nums}
 .vm-foot{font-size:13px;color:var(--muted);margin:18px 0 0;border-top:1px solid var(--line);padding-top:8px}
 .vm-err{padding:40px 16px;text-align:center;color:var(--muted)}
-@media (max-width:600px){ .vm h1{font-size:22px} .vm-dh h2{font-size:24px} .vm-modes button{padding:7px 9px;font-size:14px} .vm-posl{grid-template-columns:1fr} .vm-legend button{font-size:13px} }
+@media (max-width:600px){ .vm-zoom{right:6px;top:auto;bottom:6px;flex-direction:row} .vm-zoom button{width:34px;height:34px;font-size:16px;opacity:.92} .vm h1{font-size:22px} .vm-dh h2{font-size:24px} .vm-modes button{padding:7px 9px;font-size:14px} .vm-posl{grid-template-columns:1fr} .vm-legend button{font-size:13px} }
 @media (prefers-reduced-motion: no-preference){ .vm-cand .bar i{transition:width .4s ease} }
 </style>
 </head>
@@ -104,7 +125,7 @@ html,body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);
 <div class="vm" id="vm">
   <p class="vm-eyebrow">Komunálne voľby 2026</p>
   <h1 id="vm-title">Kto vyhral voľby v každej obci</h1>
-  <p class="vm-lead" id="vm-lead">Každý bod je jedna obec. Farba ukazuje, kto postavil zvoleného starostu alebo primátora. Obec nájdete vyhľadávaním alebo kliknutím na mapu.</p>
+  <p class="vm-lead" id="vm-lead">Každý bod je jedna obec. Farba ukazuje, kto postavil zvoleného starostu alebo primátora.</p>
   <div class="vm-bar">
     <div class="vm-modes" role="group" aria-label="Zobrazenie">
       <button type="button" data-mode="starosta" aria-pressed="true">Starosta</button>
@@ -122,6 +143,7 @@ html,body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);
     <canvas id="vm-c" aria-label="Mapa Slovenska s výsledkami v obciach" role="img"></canvas>
     <div class="vm-zoom"><button type="button" id="vm-zin" aria-label="Priblížiť">+</button><button type="button" id="vm-zout" aria-label="Oddialiť">−</button><button type="button" id="vm-zres" aria-label="Celé Slovensko" title="Celé Slovensko">⌂</button></div>
     <div class="vm-hint" id="vm-hint">Priblíženie: tlačidlá alebo Ctrl + koliesko</div>
+    <div class="vm-card" id="vm-card" hidden></div>
     <div class="vm-tip" id="vm-tip" hidden></div>
   </div>
   <ul class="vm-legend" id="vm-legend" aria-label="Legenda"></ul>
@@ -135,11 +157,11 @@ html,body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);
 "use strict";
 var BASE = (function(){ var s=document.currentScript && document.currentScript.src; return s ? s.replace(/[^\/]*$/,'') : ''; })();
 var DATA = 'data/';
-var MODES = {
-  starosta: {title:'Kto vyhral voľby v každej obci', lead:'Každý bod je jedna obec. Farba ukazuje, kto postavil zvoleného starostu alebo primátora. Obec nájdete vyhľadávaním alebo kliknutím na mapu.', note:'Koalície sú zaradené podľa účasti Smeru-SD a Hlasu-SD, ostatné koalície podľa zloženia.'},
-  zast:     {title:'Kto má najviac poslancov v zastupiteľstve', lead:'Farba ukazuje subjekt s najväčším počtom mandátov v novom zastupiteľstve. Pri rovnosti medzi stranami je bod biely.', note:'Nezávislí sa počítajú spolu ako jedna skupina.'},
-  ucast:    {title:'Účasť voličov v každej obci', lead:'Tmavšia farba znamená vyššiu účasť. Celoštátna účasť bola podľa ŠÚ SR vyššia než v roku 2022.', note:''},
-  obhajoba: {title:'Kde starosta obhájil a kde prišla zmena', lead:'Porovnanie s rokom 2022: či zvolený starosta alebo primátor viedol obec už doteraz.', note:'Porovnáva sa meno zvoleného starostu v rokoch 2022 a 2026.'}
+var MODES = {   // nadpisy a perexy majú zámerne rovnakú dĺžku, aby pri prepínaní obsah neposkakoval
+  starosta: {title:'Kto vyhral voľby v každej obci', lead:'Každý bod je jedna obec. Farba ukazuje, kto postavil zvoleného starostu alebo primátora.', note:'Koalície sú zaradené podľa účasti Smeru-SD a Hlasu-SD, ostatné koalície podľa zloženia.'},
+  zast:     {title:'Najsilnejšia strana v každej obci', lead:'Každý bod je jedna obec. Farba ukazuje subjekt s najväčším počtom mandátov v zastupiteľstve.', note:'Nezávislí sa počítajú spolu ako jedna skupina. Pri rovnosti medzi stranami je bod biely.'},
+  ucast:    {title:'Aká bola účasť v každej obci', lead:'Každý bod je jedna obec. Tmavšia farba znamená vyššiu účasť voličov vo voľbách 2026.', note:'Účasť je podiel zúčastnených zo zapísaných voličov podľa ŠÚ SR.'},
+  obhajoba: {title:'Kde starosta obhájil svoj post', lead:'Každý bod je jedna obec. Farba ukazuje, či zvolený starosta viedol obec už pred voľbami.', note:'Porovnáva sa meno zvoleného starostu v rokoch 2022 a 2026.'}
 };
 var UCAST_BINS = [[0,40,'#fde0dd','do 40%'],[40,50,'#fbb4b9','40 až 50%'],[50,60,'#f768a1','50 až 60%'],[60,70,'#c51b8a','60 až 70%'],[70,101,'#7a0177','nad 70%']];
 var OBH = {obh:['Starosta obhájil post','#1b998b'], novy:['Nový starosta','#f28c28'], nikto:['Starosta nezvolený alebo bez kandidáta','#ffffff']};
@@ -170,7 +192,7 @@ function fit(){
 }
 function resize(){
   var cw = mapEl.clientWidth; if(!cw) return;
-  W = cw; H = Math.max(260, Math.min(560, Math.round(cw*0.58)));
+  W = cw; H = Math.max(260, Math.min(560, Math.round(cw*(cw<600 ? 0.72 : 0.58))));
   dpr = Math.min(window.devicePixelRatio||1, 2);
   cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr); cv.style.height = H+'px';
   fit(); draw(); postH();
@@ -187,7 +209,7 @@ function colorOf(o){
 function obhKey(o){ return !o[9] ? 'nikto' : (o[12] ? 'obh' : 'novy'); }
 function keyOf(o){ if(mode==='starosta') return o[5]; if(mode==='zast') return o[6]; if(mode==='obhajoba') return obhKey(o); var u=o[7]; if(u==null) return 'na'; for(var i=0;i<UCAST_BINS.length;i++){ if(u<UCAST_BINS[i][1]) return 'u'+i; } return 'u4'; }
 function hollow(c){ return c==='#ffffff'; }
-function radius(o){ var v=Math.max(o[8]||50,50); return (2.4 + 1.15*Math.log10(v/50)) * Math.pow(view.k, .35); }
+function radius(o){ var v=Math.max(o[8]||50,50); var sc = Math.max(.55, Math.min(1, W/820)); return (2.4 + 1.15*Math.log10(v/50)) * sc * Math.pow(view.k, .35); }
 
 // ---------- kreslenie
 var sorted = null;
@@ -279,15 +301,28 @@ q.addEventListener('input', function(){ var v=norm(q.value); if(v.length<2){ clo
 function renderSugg(res){ if(!res.length){ closeSugg(); return; } sugSel=-1; sugg.innerHTML = res.map(function(o,i){ return '<li role="option" data-i="'+o._i+'" aria-selected="false">'+esc(o[1])+'<span>'+esc(o[2]==='Bratislava'||o[2]==='Košice'?'':'okres '+o[2])+'</span></li>'; }).join(''); sugg.hidden=false; q.setAttribute('aria-expanded','true'); }
 function closeSugg(){ sugg.hidden=true; sugg.innerHTML=''; q.setAttribute('aria-expanded','false'); }
 sugg.addEventListener('mousedown', function(e){ var li=e.target.closest('li'); if(!li) return; e.preventDefault(); pick(li); });
-function pick(li){ var o=OBCE[+li.dataset.i]; q.value=o[1]; closeSugg(); select(o, true); }
+function pick(li){ var o=OBCE[+li.dataset.i]; q.value=o[1]; closeSugg(); select(o, true, true); }
 q.addEventListener('keydown', function(e){ var lis=sugg.querySelectorAll('li'); if(e.key==='ArrowDown'||e.key==='ArrowUp'){ if(!lis.length) return; e.preventDefault(); sugSel = (sugSel + (e.key==='ArrowDown'?1:-1) + lis.length) % lis.length; lis.forEach(function(l,i){ l.setAttribute('aria-selected', String(i===sugSel)); }); } else if(e.key==='Enter'){ if(lis.length){ e.preventDefault(); pick(lis[sugSel>=0?sugSel:0]); } } else if(e.key==='Escape'){ closeSugg(); } });
 q.addEventListener('blur', function(){ setTimeout(closeSugg, 150); });
 
 // ---------- výber obce a detail
-function select(o, zoom){
-  sel = o;
+var card = document.getElementById('vm-card'), wantScroll = false;
+function select(o, zoom, scroll){
+  sel = o; wantScroll = !!scroll;
   if(zoom){ view.k = Math.max(view.k, 5); var p=[o._p[0]*base.s+base.ox, o._p[1]*base.s+base.oy]; view.x = W/2 - p[0]*view.k; view.y = H/2 - p[1]*view.k; clamp(); }
-  draw(); loadDetail(o);
+  draw(); showCard(o); loadDetail(o);
+}
+function showCard(o){
+  var c = colorOf(o), info = o[9] ? o[9]+' ('+subj(o[10])+'), '+pct(o[11]) : (o[5]==='remiza' ? 'rovnosť hlasov, starosta nezvolený' : 'nikto nekandidoval');
+  card.innerHTML = '<span class="sw" style="background:'+(hollow(c)?'transparent':c)+'"></span><span class="t"><b>'+esc(o[1])+'</b><span>'+esc(info)+'</span></span><button type="button" id="vm-godetail">Detail ↓</button>';
+  card.hidden = false; mapEl.classList.add('has-card');
+}
+card.addEventListener('click', function(e){ if(e.target.closest('#vm-godetail')) scrollToDetail(); });
+function scrollToDetail(){
+  // iframe v článku: o posun sa postará embed.js (vždy na rovnaké miesto - názov obce hore pod okrajom okna)
+  var y = det.offsetTop;
+  if(window.parent !== window){ try{ window.parent.postMessage({type:'volby-mapa-scroll', y: y}, '*'); }catch(e){} }
+  else { window.scrollTo({top: y - 12, behavior: 'smooth'}); }
 }
 function loadDetail(o){
   var b = ('0'+(parseInt(o[0],10)%64)).slice(-2);
@@ -329,12 +364,12 @@ function renderDetail(o, d){
   var obv = Object.keys(d.ob).sort(function(a,b){ return a-b; }), multi = obv.length>1;
   obv.forEach(function(k){ var ob=d.ob[k]; var zv=ob.k.filter(function(c){return c[5];}), nz=ob.k.filter(function(c){return !c[5];});
     h += '<div class="vm-obv" data-ob="'+k+'">'+(multi?'<h4>Volebný obvod č. '+k+' <small>'+pl(ob.m,'mandát','mandáty','mandátov')+(ob.p!=null?', účasť '+pct(ob.p):'')+'</small></h4>':'')+
-      '<ul class="vm-posl">'+zv.map(function(c){ return '<li><span class="sw" style="background:'+partyColor(c[2],cmap)+'"></span><span class="nm">'+esc(c[0]+' '+c[1])+'</span><span class="hl">'+num(c[3])+'</span><span class="sub">'+esc(subj(c[2]))+'</span></li>'; }).join('')+'</ul>'+
-      (nz.length?'<ul class="vm-posl" hidden>'+nz.map(function(c){ return '<li class="nz"><span class="sw" style="background:'+partyColor(c[2],cmap)+'"></span><span class="nm">'+esc(c[0]+' '+c[1])+'</span><span class="hl">'+num(c[3])+'</span><span class="sub">'+esc(subj(c[2]))+'</span></li>'; }).join('')+'</ul><button type="button" class="vm-toggle" data-n="'+nz.length+'">Zobraziť nezvolených kandidátov ('+nz.length+')</button>':'')+'</div>'; });
+      '<div class="vm-zvol"><div class="vm-zh"><span class="chk" aria-hidden="true">✓</span>Zvolení poslanci <b>'+zv.length+'</b></div><ul class="vm-posl">'+zv.map(function(c){ return '<li><span class="sw" style="background:'+partyColor(c[2],cmap)+'"></span><span class="nm">'+esc(c[0]+' '+c[1])+'</span><span class="hl">'+num(c[3])+'</span><span class="sub">'+esc(subj(c[2]))+'</span></li>'; }).join('')+'</ul></div>'+
+      (nz.length?'<div class="vm-nezv"><button type="button" class="vm-toggle" aria-expanded="false" data-n="'+nz.length+'"><span class="arr" aria-hidden="true">▸</span>Nezvolení kandidáti <b>'+nz.length+'</b> <small>zoradení podľa hlasov</small></button><ul class="vm-posl nz vm-hidden">'+nz.map(function(c){ return '<li class="nz"><span class="sw" style="background:'+partyColor(c[2],cmap)+'"></span><span class="nm">'+esc(c[0]+' '+c[1])+'</span><span class="hl">'+num(c[3])+'</span><span class="sub">'+esc(subj(c[2]))+'</span></li>'; }).join('')+'</ul></div>':'')+'</div>'; });
   det.innerHTML = h; postH();
-  det.scrollIntoView({behavior:'smooth', block:'start'});
+  if(wantScroll){ wantScroll = false; setTimeout(scrollToDetail, 50); }
 }
-det.addEventListener('click', function(e){ var b=e.target.closest('.vm-toggle'); if(!b) return; var ul=b.previousElementSibling; ul.hidden=!ul.hidden; b.textContent = ul.hidden ? 'Zobraziť nezvolených kandidátov ('+b.dataset.n+')' : 'Skryť nezvolených kandidátov'; postH(); });
+det.addEventListener('click', function(e){ var b=e.target.closest('.vm-toggle'); if(!b) return; var ul=b.parentNode.querySelector('ul'); var open = ul.classList.toggle('vm-hidden') === false; b.setAttribute('aria-expanded', String(open)); b.querySelector('.arr').textContent = open ? '▾' : '▸'; postH(); });
 
 // ---------- štart
 function start(){
@@ -351,7 +386,7 @@ function start(){
     var params = {}; try{ location.search.slice(1).split('&').forEach(function(kv){ var p=kv.split('='); if(p[0]) params[decodeURIComponent(p[0])] = decodeURIComponent(p[1]||''); }); }catch(e){}
     if(MODES[params.mode]) mode = params.mode;
     resize(); setMode(mode);
-    if(params.obec){ var o = OBCE.filter(function(x){ return x[0]===params.obec; })[0]; if(o){ sel=o; view.k=5; var p=[o._p[0]*base.s+base.ox, o._p[1]*base.s+base.oy]; view.x=W/2-p[0]*view.k; view.y=H/2-p[1]*view.k; clamp(); draw(); loadDetail(o); } }
+    if(params.obec){ var o = OBCE.filter(function(x){ return x[0]===params.obec; })[0]; if(o){ select(o, true, false); } }
     if(!('ontouchstart' in window)) document.getElementById('vm-hint').textContent = 'Priblíženie: tlačidlá, Ctrl + koliesko alebo dvojklik';
     else document.getElementById('vm-hint').textContent = 'Priblíženie dvoma prstami';
   }).catch(function(e){ mapEl.innerHTML = '<p class="vm-err">Mapu sa nepodarilo načítať ('+esc(e && e.message)+').</p>'; postH(); });
@@ -360,7 +395,6 @@ cv.addEventListener('dblclick', function(e){ var r=cv.getBoundingClientRect(); z
 if(window.parent===window) root.classList.add('standalone');
 if(window.ResizeObserver){ var lastW=0; new ResizeObserver(function(){ var w=mapEl.clientWidth; if(w && w!==lastW){ lastW=w; var k=view.k, cx=(W/2-view.x)/view.k, cy=(H/2-view.y)/view.k; resize(); if(k>1){ view.k=k; view.x=W/2-cx*k; view.y=H/2-cy*k; clamp(); draw(); } } }).observe(mapEl); }
 var rto; window.addEventListener('resize', function(){ clearTimeout(rto); rto=setTimeout(function(){ var k=view.k, cx=(W/2-view.x)/view.k, cy=(H/2-view.y)/view.k; resize(); view.k=k; view.x=W/2-cx*k; view.y=H/2-cy*k; clamp(); draw(); }, 120); });
-if(window.matchMedia){ try{ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', draw); }catch(e){} }
 start();
 })();
 </script>
